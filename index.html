@@ -5,8 +5,17 @@
   <title>Ramallah Libraries</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
   <style>
-    body { margin: 0px; height: 100%; width: 100%; }
-    #map { position: absolute; width: 100%; top: 0px; bottom: 0; }
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+    #map {
+      position: absolute;
+      width: 100%;
+      top: 0px;
+      bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -16,50 +25,73 @@
   <script>
     const mapOptions = {
       zoomSnap: 0.5,
-      center: [31.904804166870857, 35.20132345423534], // Coordinates of the Scientific Supplies Center & Lab Co.
+      center: [31.90, 35.20],
       zoom: 14,
     };
-
     const map = L.map("map", mapOptions);
-
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
       maxZoom: 20
     }).addTo(map);
 
-    // Load and display Libraries from GitHub
-    $.getJSON("https://Abbrarr.github.io/Libraries.json", function(data) {
+    function loadLibraries() {
+      return $.getJSON("https://abbrarr.github.io/Libraries.json");
+    }
+
+    function loadZones() {
+      return $.getJSON("https://abbrarr.github.io/RamallahZones.json");
+    }
+
+    function displayLibraries(data) {
       L.geoJson(data, {
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
-            radius: 8,
-            fillColor: "#FF6347", // Tomato color for libraries
-            color: "#000",
-            weight: 1,
+            radius: 6,
+            fillColor: "#FF3B3F", // Watermelon color
+            color: "#800000",
+            weight: 2,
             opacity: 1,
             fillOpacity: 0.8
           });
         },
         onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.BUSNIESS_1) {
-            layer.bindPopup(feature.properties.BUSNIESS_1); // Displaying the English name of the library
+          if (feature.properties && feature.properties.NAME_ENGLI) {
+            layer.bindPopup(feature.properties.NAME_ENGLI);
           }
         }
       }).addTo(map);
-    });
+    }
 
-    // Load and display Ramallah Zones from GitHub
-    $.getJSON("https://Abbrarr.github.io/RamallahZones.json", function(data) {
+    function displayZones(data, libraries) {
+      const libraryPoints = libraries.features.map(feature => L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]));
+
       L.geoJson(data, {
-        style: function(feature) {
+        filter: function(feature) {
+          const zonePolygon = L.polygon(feature.geometry.coordinates[0].map(coord => [coord[1], coord[0]]));
+          return libraryPoints.some(point => zonePolygon.getBounds().contains(point));
+        },
+        style: function() {
           return {
-            color: "#1E90FF", // Deep sky blue 
-            weight: 2,
+            color: "#FFFFFF", // White color for the zone borders
+            weight: 3,
             opacity: 1,
-            fillOpacity: 0 // Transparent zones
+            fillOpacity: 0 // Zones remain transparent
           };
+        },
+        onEachFeature: function(feature, layer) {
+          layer.on('click', function(e) {
+            alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
+          });
         }
       }).addTo(map);
+    }
+
+    loadLibraries().done(function(libraryData) {
+      displayLibraries(libraryData);
+
+      loadZones().done(function(zoneData) {
+        displayZones(zoneData, libraryData);
+      });
     });
   </script>
 </body>
