@@ -55,8 +55,8 @@
           });
         },
         onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.NAME_ENGLI) {
-            layer.bindPopup(feature.properties.NAME_ENGLI);
+          if (feature.properties && feature.properties.BUSNIESS_1) {
+            layer.bindPopup(feature.properties.BUSNIESS_1);
           }
         }
       }).addTo(map);
@@ -72,7 +72,7 @@
         },
         style: function() {
           return {
-            color: "white",
+            color: "Turquoise",
             weight: 3,
             opacity: 1,
             fillOpacity: 0 
