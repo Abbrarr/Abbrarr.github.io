@@ -78,11 +78,7 @@
             fillOpacity: 0 
           };
         },
-        onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.NAME_ENGLI) {
-            layer.bindPopup(feature.properties.NAME_ENGLI);
-          }
-        }
+      
         onEachFeature: function(feature, layer) {
           layer.on('click', function(e) {
             alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
