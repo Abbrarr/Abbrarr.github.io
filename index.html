@@ -93,6 +93,9 @@
         displayZones(zoneData, libraryData);
       });
     });
+    const libraryBounds = L.geoJson(libraryData).getBounds();
+      map.fitBounds(libraryBounds);
+
   </script>
 </body>
 </html>
