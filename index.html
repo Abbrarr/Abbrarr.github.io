@@ -47,8 +47,8 @@
         pointToLayer: function(feature, latlng) {
           return L.circleMarker(latlng, {
             radius: 6,
-            fillColor: "#FF3B3F", // Watermelon color
-            color: "#800000",
+            fillColor: "#FF6347",
+            color: "white",
             weight: 2,
             opacity: 1,
             fillOpacity: 0.8
@@ -78,6 +78,11 @@
             fillOpacity: 0 
           };
         },
+        onEachFeature: function(feature, layer) {
+          if (feature.properties && feature.properties.NAME_ENGLI) {
+            layer.bindPopup(feature.properties.NAME_ENGLI);
+          }
+        }
         onEachFeature: function(feature, layer) {
           layer.on('click', function(e) {
             alert("Zone: " + feature.properties.NAME_ENGLI + "\nMAIL_CODE: " + feature.properties.MAIL_CODE);
