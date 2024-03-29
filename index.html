@@ -53,10 +53,10 @@
             opacity: 1,
             fillOpacity: 0.8
           });
-        },
+        },     
         onEachFeature: function(feature, layer) {
-          if (feature.properties && feature.properties.BUSNIESS_1) {
-            layer.bindPopup(feature.properties.BUSNIESS_1);
+          if (feature.properties && feature.properties.NAME_ENGLI) {
+            layer.bindPopup(feature.properties.NAME_ENGLI);
           }
         }
       }).addTo(map);
