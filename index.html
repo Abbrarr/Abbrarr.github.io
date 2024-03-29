@@ -88,14 +88,14 @@
 
     loadLibraries().done(function(libraryData) {
       displayLibraries(libraryData);
+    const libraryBounds = L.geoJson(libraryData).getBounds();
+      map.fitBounds(libraryBounds);
 
       loadZones().done(function(zoneData) {
         displayZones(zoneData, libraryData);
       });
     });
-    const libraryBounds = L.geoJson(libraryData).getBounds();
-      map.fitBounds(libraryBounds);
-
+    
   </script>
 </body>
 </html>
